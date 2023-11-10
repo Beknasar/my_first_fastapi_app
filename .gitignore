@@ -8,3 +8,7 @@ __pycache__
 *.log
 .DS_Store
 *.db
+.env
+env.py
+*.sql
+*.ipynb
