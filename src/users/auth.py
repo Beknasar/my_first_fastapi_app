@@ -4,6 +4,10 @@ from jose import jwt
 from datetime import datetime, timedelta
 from pydantic import EmailStr
 from src.users.service import UsersService
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -21,7 +25,7 @@ def create_access_token(data: dict) -> str:
     expire = datetime.utcnow() + timedelta(minutes=30)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
-        to_encode, "ksdfjhfiksduhfslid", "HS256"
+        to_encode, os.environ.get("SECRET_KEY"), os.environ.get("ALGORITHM")
     )
     return encoded_jwt
 
