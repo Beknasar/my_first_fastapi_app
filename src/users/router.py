@@ -30,7 +30,7 @@ async def auth(response: Response, user_data: SUserAuth):
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     # Если пользователь есть, создаем токен JWT и отправляем ему в cookie
-    access_token = create_access_token({"sub": user.id})
+    access_token = create_access_token({"sub": str(user.id)})
     # засетить cookie, т.е. токен доступа для приложения booking
     # httponly, чтобы никто не мог получить токен по js и зайти под чужим именем
     response.set_cookie("booking_access_token", access_token, httponly=True)

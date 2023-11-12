@@ -26,6 +26,9 @@ DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{D
 #         v['DATABASE_URL'] = f"postgresql+asyncpg://{v.DB_USER}:{v.DB_PASS}@{v['DB_HOST']}:{v['DB_PORT']}/{v['DB_NAME']}"
 #         return v
 #
+#   SECRET_KEY: str
+#   ALGORITHM: str
+#
 #     class Config:
 #         env_file = ".env"
 #
