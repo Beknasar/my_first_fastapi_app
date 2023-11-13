@@ -1,7 +1,9 @@
 # С endpoint'ами вот здесь
-from fastapi import APIRouter, HTTPException, status, Response
+from fastapi import APIRouter, HTTPException, status, Response, Depends
 
-from src.users.auth import get_password_hash, verify_password, authenticate_user, create_access_token
+from src.users.auth import get_password_hash, authenticate_user, create_access_token
+from src.users.dependencies import get_current_user, get_current_admin_user
+from src.users.models import Users
 from src.users.schemas import SUserAuth
 from src.users.service import UsersService
 
@@ -35,3 +37,22 @@ async def auth(response: Response, user_data: SUserAuth):
     # httponly, чтобы никто не мог получить токен по js и зайти под чужим именем
     response.set_cookie("booking_access_token", access_token, httponly=True)
     return {"access_token": access_token}
+
+
+# Для выхода пользователей из учётной записи удаляется куки
+@router.post("/logout")
+async def logout_user(response: Response):
+    response.delete_cookie("booking_access_token")
+    return "Пользователь вышел из учётной записи"
+
+
+# Для получения информации о текущем пользователе
+@router.get("/me")
+async def read_users_me(current_user: Users = Depends(get_current_user)):
+    return current_user
+
+
+# Для получения данных о всех пользователях
+@router.get("/all")
+async def read_users_all(current_user: Users = Depends(get_current_admin_user)):
+    return current_user

@@ -1,3 +1,4 @@
+# Основной файл для запуска приложения. Сюда импортируются все эндпоинты сущностей
 import uvicorn
 from fastapi import FastAPI, Query
 from datetime import date
