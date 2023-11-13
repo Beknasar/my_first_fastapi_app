@@ -10,6 +10,7 @@ from .config import DATABASE_URL
 
 # движок для передачи алхимии
 engine = create_async_engine(url=DATABASE_URL)
+
 # генератор сессии (транзакции в БД)
 # переменная для работы с БД
 async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)

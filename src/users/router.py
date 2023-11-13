@@ -1,6 +1,6 @@
 # С endpoint'ами вот здесь
-from fastapi import APIRouter, HTTPException, status, Response, Depends
-
+from fastapi import APIRouter, Response, Depends
+from src.exceptions import UserAlreadyExistsException, IncorrectEmailOrPasswordException
 from src.users.auth import get_password_hash, authenticate_user, create_access_token
 from src.users.dependencies import get_current_user, get_current_admin_user
 from src.users.models import Users
@@ -19,7 +19,7 @@ async def register_user(user_data: SUserAuth):
     # Выполненный тодо 1.  Проверка пользователя с текущими данными на существование
     existing_user = await UsersService.find_one_or_none(email=user_data.email)
     if existing_user:
-        raise HTTPException(status_code=500)
+        raise UserAlreadyExistsException
     # Выполненный тодо 2. Захешировать пароль и добавить в БД
     hashed_password = get_password_hash(user_data.password)
     await UsersService.add(email=user_data.email, hashed_password=hashed_password)
@@ -30,7 +30,7 @@ async def register_user(user_data: SUserAuth):
 async def auth(response: Response, user_data: SUserAuth):
     user = await authenticate_user(user_data.email, user_data.password)
     if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise IncorrectEmailOrPasswordException
     # Если пользователь есть, создаем токен JWT и отправляем ему в cookie
     access_token = create_access_token({"sub": str(user.id)})
     # засетить cookie, т.е. токен доступа для приложения booking

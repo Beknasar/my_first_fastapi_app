@@ -1,9 +1,10 @@
 import os
 from datetime import datetime
-
+from src.exceptions import TokenExpiredException, TokenAbsentException,\
+    IncorrectTokenFormatException, UserIsNotPresentException
 from src.users.models import Users
 from src.users.service import UsersService
-from fastapi import Request, HTTPException, Depends, status
+from fastapi import Request,  Depends
 from jose import jwt, JWTError
 
 
@@ -11,7 +12,7 @@ from jose import jwt, JWTError
 def get_token(request: Request):
     token = request.cookies.get("booking_access_token")
     if not token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise TokenAbsentException
     return token
 
 
@@ -26,22 +27,22 @@ async def get_current_user(token: str = Depends(get_token)):
     # если JWT токен не является действительным
         print(payload)
     except JWTError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise IncorrectTokenFormatException
     # Извлечение значения 'exp' из декодированного JWT
     expire: float = payload.get("exp")
     # если нет expire или он истёк
     if (not expire) or (expire < datetime.utcnow().timestamp()):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise TokenExpiredException
     # if not expire or jwt.ExpiredSignatureError:
     #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     user_id: str = payload.get("sub")
     # если нет id пользователя
     if not user_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise UserIsNotPresentException
     user = await UsersService.find_by_id(int(user_id))
     if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise UserIsNotPresentException
     return user
 
 
