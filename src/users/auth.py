@@ -32,7 +32,7 @@ def create_access_token(data: dict) -> str:
 
 
 async def authenticate_user(email: EmailStr, password: str):
-# TODO 1. Проверка пользователя с текущими данными на существование.
+    # Done_TODO 1. Проверка пользователя с текущими данными на существование.
     user = await UsersService.find_one_or_none(email=email)
     if not user and not verify_password(password, user.password):
         return None

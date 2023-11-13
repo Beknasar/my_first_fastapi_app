@@ -26,16 +26,18 @@ async def get_current_user(token: str = Depends(get_token)):
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     # Извлечение значения 'exp' из декодированного JWT
-    expire: str = payload.get("exp")
-    expire_decode = datetime.utcfromtimestamp(expire)
+    expire: float = payload.get("exp")
     # если нет expire или он истёк
-    if (not expire_decode) or (expire_decode < datetime.utcnow()):
+    if (not expire) or (expire < datetime.utcnow().timestamp()):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    # if not expire or jwt.ExpiredSignatureError:
+    #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
     user_id: str = payload.get("sub")
     # если нет id пользователя
     if not user_id:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    user = await UsersService.find_by_id(user_id)
+    user = await UsersService.find_by_id(int(user_id))
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     return user
