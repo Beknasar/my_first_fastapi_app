@@ -5,3 +5,8 @@ from src.service.base import BaseService
 
 class BookingService(BaseService):
     model = Bookings
+
+    # переписываем функцию add из service/base
+    @classmethod
+    async def add(cls):
+        pass

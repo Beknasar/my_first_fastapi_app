@@ -13,5 +13,13 @@ router = APIRouter(
 
 # Возвращает журнал записей для зарегистрированного пользователя
 @router.get("")
-async def get_bookings(user: Users = Depends(get_current_user)): # -> list[SBooking]:
+async def get_bookings(user: Users = Depends(get_current_user)) -> list[SBooking]:
     return await BookingService.find_all(user_id=user.id)
+
+
+# Бронирует номер для пользователя
+@router.post("")
+async def add_booking(
+        user: Users = Depends(get_current_user),
+):
+    await BookingService.add(user_id=user.id)
