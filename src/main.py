@@ -17,7 +17,6 @@ app.include_router(router_bookings)
 # автогенерирующийся документация
 # http://127.0.0.1:8000/docs
 
-
 # схема отеля
 class SHotel(BaseModel):
     address: str
