@@ -4,6 +4,7 @@ from src.bookings.service import BookingService
 from src.bookings.schemas import SBooking
 from src.users.dependencies import get_current_user
 from src.users.models import Users
+from datetime import date
 
 router = APIRouter(
     prefix="/bookings",
@@ -20,6 +21,7 @@ async def get_bookings(user: Users = Depends(get_current_user)) -> list[SBooking
 # Бронирует номер для пользователя
 @router.post("")
 async def add_booking(
+        room_id: int, date_from: date, date_to: date,
         user: Users = Depends(get_current_user),
 ):
-    await BookingService.add(user_id=user.id)
+    await BookingService.add(user.id, room_id, date_from, date_to)
