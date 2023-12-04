@@ -5,6 +5,7 @@ from src.bookings.schemas import SBooking
 from src.users.dependencies import get_current_user
 from src.users.models import Users
 from datetime import date
+from src.exceptions import RoomCannotBeBookedException
 
 router = APIRouter(
     prefix="/bookings",
@@ -24,4 +25,6 @@ async def add_booking(
         room_id: int, date_from: date, date_to: date,
         user: Users = Depends(get_current_user),
 ):
-    await BookingService.add(user.id, room_id, date_from, date_to)
+    booking = await BookingService.add(user.id, room_id, date_from, date_to)
+    if not booking:
+        raise RoomCannotBeBookedException

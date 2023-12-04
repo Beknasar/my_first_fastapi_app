@@ -17,31 +17,36 @@ class BookingException(HTTPException):  # <-- наследуемся от HTTPEx
         super().__init__(status_code=self.status_code, detail=self.detail)
 
 
-class UserAlreadyExistsException(HTTPException):  # <-- обязательно наследуемся от нашего класса
-    status_code = status.HTTP_409_CONFLICT,
-    detail = "Пользователь уже существует",
+class UserAlreadyExistsException(BookingException):  # <-- обязательно наследуемся от нашего класса
+    status_code = status.HTTP_409_CONFLICT
+    detail = "Пользователь уже существует"
 
 
-class IncorrectEmailOrPasswordException(HTTPException):
-    status_code = status.HTTP_401_UNAUTHORIZED,
-    detail = "Неверная почта или пароль",
+class IncorrectEmailOrPasswordException(BookingException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = "Неверная почта или пароль"
 
 
-class TokenExpiredException(HTTPException):
-    status_code = status.HTTP_401_UNAUTHORIZED,
-    detail = "Токен истек",
+class TokenExpiredException(BookingException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = "Токен истек"
 
 
-class TokenAbsentException(HTTPException):
-    status_code=status.HTTP_401_UNAUTHORIZED,
-    detail = "Токен отсутствует",
+class TokenAbsentException(BookingException):
+    status_code=status.HTTP_401_UNAUTHORIZED
+    detail = "Токен отсутствует"
 
 
-class IncorrectTokenFormatException(HTTPException):
-    status_code = status.HTTP_401_UNAUTHORIZED,
-    detail = "Некорректный формат токена",
+class IncorrectTokenFormatException(BookingException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = "Некорректный формат токена"
+
 
 # если пользователя нет
-class UserIsNotPresentException(HTTPException):
-    status_code = status.HTTP_401_UNAUTHORIZED,
+class UserIsNotPresentException(BookingException):
+    status_code = status.HTTP_401_UNAUTHORIZED
 
+
+class RoomCannotBeBookedException(BookingException):
+    status_code = status.HTTP_409_CONFLICT
+    detail = "Не осталось свободных номеров"
