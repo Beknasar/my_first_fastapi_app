@@ -19,7 +19,7 @@ class BookingService(BaseService):
             date_from: date,
             date_to: date,
     ):
-        """
+        """""
         ---ДАТА ЗАЕЗДА '2023-05-15'
         ---ДАТА ВЫЕЗДА '2023-06-20'
         ---Room 1
@@ -45,7 +45,7 @@ class BookingService(BaseService):
         LEFT JOIN booked_rooms ON booked_rooms.room_id = rooms.id
         WHERE rooms.id = 1
         GROUP BY rooms.quantity, booked_rooms.room_id
-        """
+        """""
         async with async_session_maker() as session:
             booked_rooms = select(Bookings).where(
                 and_(
@@ -63,12 +63,12 @@ class BookingService(BaseService):
                 )
                 # подписываем через .cte()
             ).cte("booked_rooms")
-            '''
+            '''''
                 SELECT rooms.quantity - COUNT(booked_rooms.room_id) FROM rooms
                 LEFT JOIN booked_rooms ON booked_rooms.room_id = rooms.id
                 WHERE rooms.id = 1
                 GROUP BY rooms.quantity, booked_rooms.room_id
-            '''
+            '''''
             get_rooms_left = select(
                 (Rooms.quantity - func.count(booked_rooms.c.room_id)).label("rooms_left") # label для уточнения
                 ).select_from(Rooms).join(

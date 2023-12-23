@@ -10,3 +10,7 @@ class SHotels(BaseModel):
     services: list
     rooms_quantity: int
     image_id: int
+
+
+class SHotelsWithRoomsLeft(SHotels):
+    rooms_left: int
