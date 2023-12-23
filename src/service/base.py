@@ -2,7 +2,7 @@
 
 # импортируем создатель(генератор) сессии
 from src.database import async_session_maker
-from sqlalchemy import select, insert
+from sqlalchemy import select, insert, delete
 
 
 # Для избежания повторных методов
@@ -47,4 +47,11 @@ class BaseService:
             query = insert(cls.model).values(**data)
             await session.execute(query)
             # сохранить изменения
+            await session.commit()
+
+    @classmethod
+    async def delete(cls, model_id: int):
+        async with async_session_maker() as session:
+            query = delete(cls.model).filter_by(id=model_id)
+            await session.execute(query)
             await session.commit()

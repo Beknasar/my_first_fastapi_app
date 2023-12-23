@@ -9,41 +9,18 @@ from typing import Optional
 
 from src.bookings.router import router as router_bookings
 from src.users.router import router as router_users
+from src.hotels.router import router as router_hotels
+from src.hotels.rooms.router import router as router_rooms
 
 app = FastAPI()
 app.include_router(router_users)
 app.include_router(router_bookings)
+app.include_router(router_hotels)
+app.include_router(router_rooms)
+
 
 # автогенерирующийся документация
 # http://127.0.0.1:8000/docs
-
-# схема отеля
-class SHotel(BaseModel):
-    address: str
-    name: str
-    stars: int
-
-
-# логика "рычаг", endpoint
-@app.get("/hotels", response_model=list[SHotel])
-def get_hotels(
-    location: str,
-    date_from: date,
-    date_to: date,
-    # опциональные параметры
-    # has_spa: Optional[bool] = None,
-    # stars: Optional[int] = Query(None, ge=1, le=5),
-    has_spa: bool = None,
-    stars: int = Query(None, ge=1, le=5),
-) -> list[SHotel]:
-    hotels = [
-        {
-            "address": "ул. Горькое, 6, Бишкек",
-            "name": "International",
-            "stars": 3,
-        },
-    ]
-    return hotels
 
 
 if __name__ == '__main__':
