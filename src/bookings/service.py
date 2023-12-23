@@ -49,7 +49,7 @@ class BookingService(BaseService):
         async with async_session_maker() as session:
             booked_rooms = select(Bookings).where(
                 and_(
-                    Bookings.room_id == 1,
+                    Bookings.room_id == room_id,
                     or_(
                         and_(
                             Bookings.date_from >= date_from,
@@ -75,7 +75,7 @@ class BookingService(BaseService):
                 # мы указали .c потому, что до этого помечали booked rooms через cte
                 # вместо ON у нас "," здесь
                     booked_rooms, booked_rooms.c.room_id == Rooms.id, isouter=True
-                ).where(Rooms.id == 1).group_by(
+                ).where(Rooms.id == room_id).group_by(
                 Rooms.quantity, booked_rooms.c.room_id
             )
             # чтобы нам запринтили ровно так, как это происходит в алхимии, вместо print(rooms_left)
