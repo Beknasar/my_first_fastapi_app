@@ -3,7 +3,7 @@ from typing import Optional
 
 from src.hotels.models import Hotels
 from src.service.base import BaseService
-from src.database import engine, async_session_maker
+from src.database import async_session_maker, engine
 from datetime import date
 from src.bookings.models import Bookings
 from src.hotels.rooms.models import Rooms
@@ -52,8 +52,8 @@ class HotelsService(BaseService):
                         Bookings.date_from <= date_to
                     ),
                     and_(
-                        Bookings.date_from <= date_from,
-                        Bookings.date_from > date_from
+                        Bookings.date_from <= date_to,  # Начало бронирования до date_to
+                        Bookings.date_to > date_from  # Конец бронирования после date_from
                     ),
                 )
                 # подписываем через .cte()

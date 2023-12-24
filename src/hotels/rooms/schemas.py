@@ -11,3 +11,8 @@ class SRooms(BaseModel):
     services: list
     quantity: int
     image_id: int
+
+
+class SRoomsTotalCostAndRoomsLeft(SRooms):
+    rooms_left: int
+    total_cost: int

@@ -56,8 +56,8 @@ class BookingService(BaseService):
                             Bookings.date_from <= date_to
                         ),
                         and_(
-                            Bookings.date_from <= date_from,
-                            Bookings.date_from > date_from
+                            Bookings.date_from <= date_to,  # Начало бронирования до date_to
+                            Bookings.date_to > date_from  # Конец бронирования после date_from
                         ),
                     )
                 )
