@@ -17,6 +17,10 @@ async def get_hotels(location: str, date_from: date, date_to: date) -> list[SHot
     return await HotelsService.find_all(location, date_from, date_to)
 
 
+@router.get("id/{hotel_id}/")
+async def get_hotel_by_id(hotel_id: int):
+    return await HotelsService.find_by_id(hotel_id)
+
 # TODO 1. Написать методы для получения, добавления, изменения и удаления записей HotelsService
 # @router.patch("/{hotel_id}/update")
 # async def update_hotel(
