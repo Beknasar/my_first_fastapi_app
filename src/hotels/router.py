@@ -1,8 +1,8 @@
 # С эндпоинтами вот здесь
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from src.hotels.service import HotelsService
 from src.hotels.schemas import SHotels, SHotelsWithRoomsLeft
-from datetime import date
+from datetime import date, datetime
 from src.exceptions import RoomCannotBeBookedException
 
 router = APIRouter(
@@ -13,7 +13,11 @@ router = APIRouter(
 
 # логика "рычаг", endpoint
 @router.get("")
-async def get_hotels(location: str, date_from: date, date_to: date) -> list[SHotelsWithRoomsLeft]:
+async def get_hotels_by_location_and_time(
+        location: str,
+        date_from: date = Query(..., description=f"Например, {datetime.now().date()}"),
+        date_to: date = Query(..., description=f"Например, {datetime.now().date()}")
+    ) -> list[SHotelsWithRoomsLeft]:
     return await HotelsService.find_all(location, date_from, date_to)
 
 

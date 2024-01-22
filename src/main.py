@@ -12,12 +12,16 @@ from src.users.router import router as router_users
 from src.hotels.router import router as router_hotels
 from src.hotels.rooms.router import router as router_rooms
 
+from src.pages.router import router as router_pages
+
 app = FastAPI()
+
 app.include_router(router_users)
 app.include_router(router_bookings)
 app.include_router(router_hotels)
 app.include_router(router_rooms)
 
+app.include_router(router_pages)
 
 # автогенерирующийся документация
 # http://127.0.0.1:8000/docs
